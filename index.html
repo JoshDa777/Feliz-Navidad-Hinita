@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Navidad Hinita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --azul-noche: #0a192f;
+            --dorado-hero: #f9d71c;
+            --rojo-navidad: #d62828;
+            --blanco-nieve: #e0f2f1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--azul-noche);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* Fondo de Estrellas/Nieve */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .header-section {
+            padding: 50px 20px;
+            animation: fadeIn Down 1.5s ease-out;
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 4rem;
+            color: var(--dorado-hero);
+            text-shadow: 4px 4px 0px var(--rojo-navidad);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .subtitulo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--blanco-nieve);
+        }
+
+        /* Contenedor de Regalos Interactivos */
+        .regalos-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 50px 20px;
+        }
+
+        .regalo-card {
+            width: 250px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 2px dashed var(--dorado-hero);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .regalo-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(249, 215, 28, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .regalo-card img {
+            width: 80%;
+            height: auto;
+            border-radius: 10px;
+            /* Aquí irán tus diseños de Canva */
+        }
+
+        .label-regalo {
+            margin-top: 15px;
+            font-weight: bold;
+            color: var(--dorado-hero);
+            text-transform: uppercase;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Efecto de brillo tipo "Plus Ultra" */
+        .plus-ultra-btn {
+            background: var(--rojo-navidad);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .plus-ultra-btn:hover {
+            background: var(--dorado-hero);
+            color: var(--azul-noche);
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <section class="header-section">
+        <h1>¡Feliz Navidad Hinitaa!</h1>
+        <p class="subtitulo">Te amo mucho mi amorcito ❤️</p>
+        <button class="plus-ultra-btn" onclick="lanzarConfeti()">¡PLUS ULTRA!</button>
+    </section>
+
+    <div class="regalos-container">
+        <div class="regalo-card" onclick="alert('Aquí pondremos una de tus cartas de Canva')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo">
+            <span class="label-regalo">Abrir Detalle 1</span>
+        </div>
+
+        <div class="regalo-card" onclick="alert('¡Otra sorpresa de Héroes!')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo">
+            <span class="label-regalo">Abrir Detalle 2</span>
+        </div>
+
+        <div class="regalo-card" onclick="alert('Carga aquí tu diseño de Canva')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo">
+            <span class="label-regalo">Abrir Detalle 3</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        function lanzarConfeti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f9d71c', '#d62828', '#ffffff']
+            });
+        }
+        
+        // Efecto de nieve automático
+        setInterval(() => {
+            if(Math.random() > 0.7) lanzarConfeti();
+        }, 3000);
+    </script>
+</body>
+</html>
