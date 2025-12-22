@@ -3,171 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi Hinita - Feliz Navidad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>Navidad para Hinita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --azul-profundo: #050a30;
-            --azul-electrico: #000c66;
-            --dorado-hero: #FFD700;
-            --rojo-hero: #FF0000;
+            --azul-oscuro: #050a30;
+            --dorado-mha: #f9d71c;
+            --rojo-mha: #d62828;
         }
 
         body {
             margin: 0;
-            background: var(--azul-profundo);
-            background: radial-gradient(circle, #0a192f 0%, #050a30 100%);
-            color: white;
+            padding: 0;
+            background: var(--azul-oscuro);
             font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden; /* Para que la nieve no cree barras de scroll */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Títulos */
-        header {
+        /* Lienzo de Nieve */
+        #snowCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .contenedor-principal {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            padding: 60px 20px;
         }
 
         h1 {
             font-family: 'Bangers', cursive;
-            font-size: 5rem;
-            color: var(--dorado-hero);
-            text-shadow: 5px 5px 0px var(--rojo-hero);
-            margin: 0;
-            letter-spacing: 4px;
+            font-size: 4rem;
+            color: var(--dorado-mha);
+            text-shadow: 4px 4px 0px var(--rojo-mha);
+            margin-bottom: 50px;
         }
 
-        .subtitulo {
-            font-size: 1.8rem;
-            font-weight: 300;
-            opacity: 0.9;
-            margin-top: 10px;
+        /* Estilo de los Regalos */
+        .seccion-regalos {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
         }
 
-        /* Contenedor de Imágenes/Cartas */
-        .grid-cartas {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .item-carta {
-            position: relative;
-            border: 4px solid white;
-            border-radius: 15px;
-            overflow: hidden;
+        .regalo {
+            width: 150px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
         }
 
-        .item-carta:hover {
-            transform: scale(1.05) rotate(2deg);
-            border-color: var(--dorado-hero);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+        .regalo:hover {
+            transform: scale(1.2) rotate(5deg);
         }
 
-        .item-carta img {
+        .regalo img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
         }
 
-        /* Overlay para ver la carta en grande */
-        .overlay {
+        /* Ventana de la Carta (Modal) */
+        .modal {
+            display: none; /* Escondido por defecto */
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            cursor: zoom-out;
+            flex-direction: column;
         }
 
-        .overlay img {
-            max-width: 90%;
-            max-height: 90%;
+        .carta-imagen {
+            max-width: 80%;
+            max-height: 80vh;
             border: 5px solid white;
             border-radius: 10px;
-            animation: zoomIn 0.3s ease;
+            box-shadow: 0 0 30px var(--dorado-mha);
+            transform: scale(0.7);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes zoomIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        .modal.activo .carta-imagen {
+            transform: scale(1);
         }
 
-        /* Nieve de fondo */
-        .snow-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 3rem; }
-            .grid-cartas { padding: 20px; }
+        .boton-cerrar {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: var(--rojo-mha);
+            color: white;
+            border: none;
+            font-family: 'Bangers';
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>FELIZ NAVIDAD HINITAA</h1>
-        <div class="subtitulo">Te amo mucho mi amorcito ❤️</div>
-    </header>
+    <canvas id="snowCanvas"></canvas>
 
-    <main class="grid-cartas">
-        <div class="item-carta" onclick="abrirImagen(this)">
-            <img src="img/carta1.png" alt="Carta 1">
+    <div class="contenedor-principal">
+        <h1>¡Feliz Navidad Hinitaa!</h1>
+        
+        <div class="seccion-regalos">
+            <div class="regalo" onclick="abrirCarta('img/carta1.png')">
+                <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo 1">
+                <p>Para ti ❤️</p>
+            </div>
+
+            <div class="regalo" onclick="abrirCarta('img/carta2.png')">
+                <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo 2">
+                <p>Abre esto...</p>
+            </div>
+
+            <div class="regalo" onclick="abrirCarta('img/carta3.png')">
+                <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo 3">
+                <p>Plus Ultra!</p>
+            </div>
         </div>
+    </div>
 
-        <div class="item-carta" onclick="abrirImagen(this)">
-            <img src="img/carta2.png" alt="Carta 2">
-        </div>
-
-        <div class="item-carta" onclick="abrirImagen(this)">
-            <img src="img/diseno3.png" alt="Diseño 3">
-        </div>
-
-        </main>
-
-    <div id="overlay" class="overlay" onclick="cerrarImagen()">
-        <img id="img-grande" src="" alt="Vista grande">
+    <div id="miModal" class="modal" onclick="cerrarCarta()">
+        <img id="imagenCarta" src="" class="carta-imagen">
+        <button class="boton-cerrar">Cerrar Carta</button>
     </div>
 
     <script>
-        // Función para ver en grande
-        function abrirImagen(elemento) {
-            const src = elemento.querySelector('img').src;
-            document.getElementById('img-grande').src = src;
-            document.getElementById('overlay').style.display = 'flex';
+        // --- LÓGICA DE LAS CARTAS ---
+        function abrirCarta(rutaImagen) {
+            const modal = document.getElementById('miModal');
+            const img = document.getElementById('imagenCarta');
+            img.src = rutaImagen;
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('activo'), 10);
         }
 
-        function cerrarImagen() {
-            document.getElementById('overlay').style.display = 'none';
+        function cerrarCarta() {
+            const modal = document.getElementById('miModal');
+            modal.classList.remove('activo');
+            setTimeout(() => modal.style.display = 'none', 300);
         }
 
-        // Efecto Plus Ultra: Si presiona la tecla 'P' lanza confeti
-        document.addEventListener('keydown', (e) => {
-            if(e.key.toLowerCase() === 'p') {
-                lanzarConfeti();
+        // --- LÓGICA DE LA NIEVE ---
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, snowflakes = [];
+
+        function initSnow() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            snowflakes = [];
+            for (let i = 0; i < 150; i++) {
+                snowflakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 4 + 1,
+                    d: Math.random() * 1
+                });
             }
-        });
+        }
+
+        function drawSnow() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.beginPath();
+            for (let i = 0; i < snowflakes.length; i++) {
+                let f = snowflakes[i];
+                ctx.moveTo(f.x, f.y);
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+            }
+            ctx.fill();
+            moveSnow();
+        }
+
+        function moveSnow() {
+            for (let i = 0; i < snowflakes.length; i++) {
+                let f = snowflakes[i];
+                f.y += Math.pow(f.d, 2) + 1;
+                f.x += Math.sin(f.y / 50);
+                if (f.y > height) {
+                    snowflakes[i] = { x: Math.random() * width, y: 0, r: f.r, d: f.d };
+                }
+            }
+        }
+
+        window.addEventListener('resize', initSnow);
+        initSnow();
+        setInterval(drawSnow, 30);
     </script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </body>
 </html>
