@@ -3,171 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Navidad Hinita</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <title>Para mi Hinita - Feliz Navidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --azul-noche: #0a192f;
-            --dorado-hero: #f9d71c;
-            --rojo-navidad: #d62828;
-            --blanco-nieve: #e0f2f1;
+            --azul-profundo: #050a30;
+            --azul-electrico: #000c66;
+            --dorado-hero: #FFD700;
+            --rojo-hero: #FF0000;
         }
 
         body {
             margin: 0;
-            padding: 0;
-            background-color: var(--azul-noche);
+            background: var(--azul-profundo);
+            background: radial-gradient(circle, #0a192f 0%, #050a30 100%);
             color: white;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Títulos */
+        header {
             text-align: center;
-        }
-
-        /* Fondo de Estrellas/Nieve */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .header-section {
-            padding: 50px 20px;
-            animation: fadeIn Down 1.5s ease-out;
+            padding: 60px 20px;
         }
 
         h1 {
             font-family: 'Bangers', cursive;
-            font-size: 4rem;
+            font-size: 5rem;
             color: var(--dorado-hero);
-            text-shadow: 4px 4px 0px var(--rojo-navidad);
-            letter-spacing: 3px;
-            margin-bottom: 10px;
+            text-shadow: 5px 5px 0px var(--rojo-hero);
+            margin: 0;
+            letter-spacing: 4px;
         }
 
         .subtitulo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--blanco-nieve);
+            font-size: 1.8rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-top: 10px;
         }
 
-        /* Contenedor de Regalos Interactivos */
-        .regalos-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            padding: 50px 20px;
+        /* Contenedor de Imágenes/Cartas */
+        .grid-cartas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .regalo-card {
-            width: 250px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            border: 2px dashed var(--dorado-hero);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .item-carta {
             position: relative;
+            border: 4px solid white;
+            border-radius: 15px;
             overflow: hidden;
-        }
-
-        .regalo-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(249, 215, 28, 0.3);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .regalo-card img {
-            width: 80%;
-            height: auto;
-            border-radius: 10px;
-            /* Aquí irán tus diseños de Canva */
-        }
-
-        .label-regalo {
-            margin-top: 15px;
-            font-weight: bold;
-            color: var(--dorado-hero);
-            text-transform: uppercase;
-        }
-
-        /* Animaciones */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Efecto de brillo tipo "Plus Ultra" */
-        .plus-ultra-btn {
-            background: var(--rojo-navidad);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-family: 'Bangers', cursive;
-            font-size: 1.5rem;
-            border-radius: 50px;
             cursor: pointer;
-            margin-top: 30px;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
-        .plus-ultra-btn:hover {
-            background: var(--dorado-hero);
-            color: var(--azul-noche);
-            transform: scale(1.1);
+        .item-carta:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--dorado-hero);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
         }
 
+        .item-carta img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Overlay para ver la carta en grande */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: zoom-out;
+        }
+
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid white;
+            border-radius: 10px;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Nieve de fondo */
+        .snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .grid-cartas { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="particles-js"></div>
+    <header>
+        <h1>FELIZ NAVIDAD HINITAA</h1>
+        <div class="subtitulo">Te amo mucho mi amorcito ❤️</div>
+    </header>
 
-    <section class="header-section">
-        <h1>¡Feliz Navidad Hinitaa!</h1>
-        <p class="subtitulo">Te amo mucho mi amorcito ❤️</p>
-        <button class="plus-ultra-btn" onclick="lanzarConfeti()">¡PLUS ULTRA!</button>
-    </section>
-
-    <div class="regalos-container">
-        <div class="regalo-card" onclick="alert('Aquí pondremos una de tus cartas de Canva')">
-            <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo">
-            <span class="label-regalo">Abrir Detalle 1</span>
+    <main class="grid-cartas">
+        <div class="item-carta" onclick="abrirImagen(this)">
+            <img src="img/carta1.png" alt="Carta 1">
         </div>
 
-        <div class="regalo-card" onclick="alert('¡Otra sorpresa de Héroes!')">
-            <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo">
-            <span class="label-regalo">Abrir Detalle 2</span>
+        <div class="item-carta" onclick="abrirImagen(this)">
+            <img src="img/carta2.png" alt="Carta 2">
         </div>
 
-        <div class="regalo-card" onclick="alert('Carga aquí tu diseño de Canva')">
-            <img src="https://cdn-icons-png.flaticon.com/512/1139/1139982.png" alt="Regalo">
-            <span class="label-regalo">Abrir Detalle 3</span>
+        <div class="item-carta" onclick="abrirImagen(this)">
+            <img src="img/diseno3.png" alt="Diseño 3">
         </div>
+
+        </main>
+
+    <div id="overlay" class="overlay" onclick="cerrarImagen()">
+        <img id="img-grande" src="" alt="Vista grande">
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        function lanzarConfeti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#f9d71c', '#d62828', '#ffffff']
-            });
+        // Función para ver en grande
+        function abrirImagen(elemento) {
+            const src = elemento.querySelector('img').src;
+            document.getElementById('img-grande').src = src;
+            document.getElementById('overlay').style.display = 'flex';
         }
-        
-        // Efecto de nieve automático
-        setInterval(() => {
-            if(Math.random() > 0.7) lanzarConfeti();
-        }, 3000);
+
+        function cerrarImagen() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Efecto Plus Ultra: Si presiona la tecla 'P' lanza confeti
+        document.addEventListener('keydown', (e) => {
+            if(e.key.toLowerCase() === 'p') {
+                lanzarConfeti();
+            }
+        });
     </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </body>
 </html>
