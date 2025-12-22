@@ -3,149 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plus Ultra Christmas - Hinita</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <title>Para mi Hinita - Feliz Navidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --azul-fondo: #0a192f;
-            --mha-yellow: #F9D71C;
-            --mha-red: #D62828;
-            --mha-blue: #003087;
+            --azul-profundo: #050a30;
+            --dorado-hero: #FFD700;
+            --rojo-hero: #FF0000;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: var(--azul-fondo);
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Evita scrolls raros */
+        body {
+            margin: 0;
+            background: radial-gradient(circle, #0a192f 0%, #050a30 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Canvas para la nieve */
+        /* Nieve de fondo */
         #snowCanvas {
             position: fixed;
             top: 0; left: 0;
-            z-index: 1;
             pointer-events: none;
+            z-index: 1;
         }
 
-        /* Título Estilo Logo MHA */
-        .hero-title {
+        header {
+            text-align: center;
+            padding: 50px 20px;
             position: relative;
             z-index: 10;
-            margin-top: 5vh;
-            text-align: center;
-            animation: bounceIn 1s ease;
         }
 
         h1 {
             font-family: 'Bangers', cursive;
-            font-size: clamp(3rem, 8vw, 6rem);
-            color: var(--mha-yellow);
-            text-shadow: 5px 5px 0px var(--mha-red), 10px 10px 0px var(--mha-blue);
+            font-size: 4.5rem;
+            color: var(--dorado-hero);
+            text-shadow: 4px 4px 0px var(--rojo-hero);
             margin: 0;
             letter-spacing: 3px;
-            transform: skew(-5deg) rotate(-2deg);
         }
 
-        .sub-badge {
-            display: inline-block;
-            background: var(--mha-red);
-            color: white;
-            padding: 5px 20px;
-            font-size: 1.2rem;
+        .subtitulo {
+            font-size: 1.5rem;
             margin-top: 10px;
-            box-shadow: 5px 5px 0px white;
-            transform: skew(-10deg);
+            font-weight: 300;
         }
 
-        /* Area de Regalos */
-        .gift-container {
+        /* Contenedor de Regalos */
+        .grid-cartas {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px;
+            flex-wrap: wrap;
             position: relative;
             z-index: 10;
-            display: flex;
-            gap: 30px;
-            margin-top: 10vh;
-            flex-wrap: wrap;
-            justify-content: center;
         }
 
-        .gift-box {
-            width: 150px;
-            height: 150px;
-            background: #fff;
-            border: 4px solid var(--mha-blue);
+        .regalo {
+            width: 200px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px dashed var(--dorado-hero);
             border-radius: 15px;
-            cursor: pointer;
-            position: relative;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .regalo:hover {
+            transform: scale(1.1) rotate(3deg);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px var(--dorado-hero);
+        }
+
+        .regalo-icon {
             font-size: 4rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 0 var(--mha-red);
+            margin-bottom: 15px;
         }
 
-        /* Listones del regalo con CSS */
-        .gift-box::before { content: ''; position: absolute; width: 25px; height: 100%; background: var(--mha-red); }
-        .gift-box::after { content: ''; position: absolute; width: 100%; height: 25px; background: var(--mha-red); }
-
-        .gift-box:hover {
-            transform: scale(1.1) rotate(5deg) translateY(-10px);
-            box-shadow: 0 15px 0 var(--mha-yellow);
-        }
-
-        .gift-box span {
-            position: relative;
-            z-index: 5;
-            filter: drop-shadow(2px 2px 0 black);
-        }
-
-        /* Modal de la Carta */
-        .modal {
-            display: none;
+        /* Visor de la Carta (Modal) */
+        .overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
+            display: none;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            z-index: 1000;
+            cursor: zoom-out;
         }
 
-        .modal img {
-            max-width: 95%;
-            max-height: 80vh;
-            border: 10px solid white;
+        .overlay img {
+            max-width: 90%;
+            max-height: 85vh;
+            border: 5px solid white;
             border-radius: 10px;
-            box-shadow: 0 0 50px var(--mha-yellow);
-            transform: scale(0.8);
-            transition: 0.4s ease;
+            animation: zoomIn 0.3s ease;
         }
 
-        .modal.active img { transform: scale(1); }
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
 
-        .close-btn {
+        .btn-cerrar {
             position: absolute;
             top: 20px; right: 20px;
-            background: var(--mha-red);
+            background: var(--rojo-hero);
             color: white;
             border: none;
-            font-family: 'Bangers';
-            font-size: 2rem;
             padding: 10px 20px;
+            font-family: 'Bangers';
+            font-size: 1.5rem;
             cursor: pointer;
-            z-index: 1001;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            70% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -153,75 +134,85 @@
 
     <canvas id="snowCanvas"></canvas>
 
-    <div class="hero-title">
-        <h1>FELIZ NAVIDAD HINITAA</h1>
-        <div class="sub-badge">TE AMO MUCHO MI AMORCITO ❤️</div>
-    </div>
+    <header>
+        <h1>¡FELIZ NAVIDAD HINITAA!</h1>
+        <div class="subtitulo">Te amo mucho mi amorcito ❤️</div>
+    </header>
 
-    <div class="gift-container">
-        <div class="gift-box" onclick="openGift('img/carta1.png')"><span>🎁</span></div>
-        <div class="gift-box" onclick="openGift('img/carta2.png')"><span>🎁</span></div>
-        <div class="gift-box" onclick="openGift('img/carta3.png')"><span>🎁</span></div>
-    </div>
+    <main class="grid-cartas">
+        <div class="regalo" onclick="abrirCarta('carta1.png')">
+            <div class="regalo-icon">🎁</div>
+            <span>Para ti</span>
+        </div>
 
-    <div id="giftModal" class="modal" onclick="closeGift()">
-        <button class="close-btn">CERRAR</button>
-        <img id="modalImg" src="">
+        <div class="regalo" onclick="abrirCarta('carta2.png')">
+            <div class="regalo-icon">🎁</div>
+            <span>Plus Ultra</span>
+        </div>
+
+        <div class="regalo" onclick="abrirCarta('carta3.png')">
+            <div class="regalo-icon">🎁</div>
+            <span>Ábreme</span>
+        </div>
+    </main>
+
+    <div id="overlay" class="overlay" onclick="cerrarCarta()">
+        <button class="btn-cerrar">CERRAR</button>
+        <img id="img-grande" src="" alt="Cargando carta...">
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
     <script>
-        // --- NIEVE ---
+        // --- LÓGICA DE NIEVE ---
         const canvas = document.getElementById('snowCanvas');
         const ctx = canvas.getContext('2d');
-        let w, h, particles = [];
+        let w, h, flakes = [];
 
-        function setup() {
+        function initSnow() {
             w = window.innerWidth; h = window.innerHeight;
             canvas.width = w; canvas.height = h;
-            particles = [];
-            for(let i=0; i<120; i++) particles.push({x: Math.random()*w, y: Math.random()*h, r: Math.random()*4+1, d: Math.random()*1.5});
+            flakes = [];
+            for(let i=0; i<150; i++) flakes.push({x: Math.random()*w, y: Math.random()*h, r: Math.random()*3+1, d: Math.random()*1});
         }
 
-        function draw() {
-            ctx.clearRect(0, 0, w, h);
-            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        function drawSnow() {
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = "white";
             ctx.beginPath();
-            particles.forEach(p => {
-                ctx.moveTo(p.x, p.y);
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                p.y += p.d;
-                if(p.y > h) p.y = -10;
+            flakes.forEach(f => {
+                ctx.moveTo(f.x, f.y);
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+                f.y += f.d + 0.5;
+                if(f.y > h) f.y = -5;
             });
             ctx.fill();
-            requestAnimationFrame(draw);
+            requestAnimationFrame(drawSnow);
         }
 
-        // --- FUNCIONES ---
-        function openGift(src) {
-            const modal = document.getElementById('giftModal');
-            document.getElementById('modalImg').src = src;
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 50);
+        // --- LÓGICA DE CARTAS ---
+        function abrirCarta(nombreArchivo) {
+            const overlay = document.getElementById('overlay');
+            const img = document.getElementById('img-grande');
+            
+            // IMPORTANTE: Aquí se asigna la ruta de tu imagen
+            img.src = nombreArchivo; 
+            
+            overlay.style.display = 'flex';
 
-            // Explosión de Héroe (Confeti)
             confetti({
-                particleCount: 150,
-                spread: 100,
+                particleCount: 100,
+                spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#F9D71C', '#D62828', '#003087', '#FFFFFF']
+                colors: ['#FFD700', '#FF0000', '#FFFFFF']
             });
         }
 
-        function closeGift() {
-            const modal = document.getElementById('giftModal');
-            modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 400);
+        function cerrarCarta() {
+            document.getElementById('overlay').style.display = 'none';
         }
 
-        window.addEventListener('resize', setup);
-        setup(); draw();
+        window.addEventListener('resize', initSnow);
+        initSnow(); drawSnow();
     </script>
 </body>
 </html>
