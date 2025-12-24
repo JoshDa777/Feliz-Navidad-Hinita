@@ -8,37 +8,39 @@
     
     <style>
         :root {
-            --rojo-fondo: #8b0000;
+            --rojo-oscuro: #8b0000;
             --rojo-brillante: #d62828;
             --dorado-mha: #f9d71c;
             --azul-mha: #003087;
             --blanco: #ffffff;
         }
 
-        /* Configuración base para evitar recortes */
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             padding: 0;
+            /* FONDO ROJO RECUPERADO */
             background: radial-gradient(circle, var(--rojo-brillante) 0%, var(--rojo-oscuro) 100%);
+            background-attachment: fixed;
             font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
+            overflow-y: auto;
             color: var(--blanco);
-            overflow-x: hidden; /* Evita el ancho infinito */
-            overflow-y: auto;   /* Permite scroll si el contenido es largo en celular */
         }
 
-        /* Canvas para la nieve */
+        /* NIEVE DE FONDO RECUPERADA */
         #snowCanvas {
             position: fixed;
-            top: 0; left: 0;
-            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Detrás de todo */
             pointer-events: none;
         }
 
@@ -46,90 +48,72 @@
             position: relative;
             z-index: 10;
             text-align: center;
-            padding: 40px 20px 20px;
-            width: 100%;
+            padding: 40px 20px;
         }
 
         h1 {
             font-family: 'Bangers', cursive;
-            font-size: clamp(2.2rem, 8vw, 5rem);
+            font-size: clamp(2.5rem, 9vw, 5.5rem);
             color: var(--dorado-mha);
-            text-shadow: 4px 4px 0px var(--azul-mha);
+            text-shadow: 4px 4px 0px var(--azul-mha), 6px 6px 15px rgba(0,0,0,0.5);
             margin: 0;
-            letter-spacing: 2px;
-            line-height: 1.1;
+            transform: skew(-5deg);
         }
 
-        .amor-msg {
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        /* Botón Plus Ultra */
         .btn-plus-ultra {
             position: relative;
             z-index: 10;
             margin-top: 20px;
-            padding: 15px 35px;
+            padding: 15px 40px;
             font-family: 'Bangers';
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             background: var(--azul-mha);
             color: white;
             border: 4px solid var(--dorado-mha);
             border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .btn-plus-ultra:hover {
-            transform: scale(1.1) rotate(-2deg);
+            transform: scale(1.15) rotate(-3deg);
             background: var(--dorado-mha);
             color: var(--azul-mha);
         }
 
-        /* CONTENEDOR DE REGALOS RESPONSIVO */
+        /* CONTENEDOR DE REGALOS (REDISEÑADO PARA CELULAR) */
         .regalos-container {
             position: relative;
             z-index: 10;
             display: flex;
-            flex-wrap: wrap; /* Importante: hace que los regalos bajen si no caben */
+            flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
-            gap: 20px;
+            gap: 30px;
             width: 100%;
-            max-width: 1100px;
-            padding: 40px 20px;
-            margin-top: 20px;
+            max-width: 1200px;
+            padding: 20px;
+            margin-bottom: 50px;
         }
 
         .regalo-item {
-            flex: 1 1 280px; /* Crece y se encoge, pero intenta tener 280px de ancho */
-            max-width: 320px;
+            flex: 0 1 300px; /* Tamaño base */
+            max-width: 100%;
             cursor: pointer;
-            transition: transform 0.4s ease;
-            animation: float 3s ease-in-out infinite; /* Animación de levitación */
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            transition: 0.4s ease;
         }
 
         .regalo-item:hover {
-            animation-play-state: paused;
-            transform: scale(1.1);
+            transform: scale(1.1) translateY(-15px);
         }
 
         .regalo-item img {
             width: 100%;
             height: auto;
-            display: block;
-            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.4));
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
         }
 
-        /* MODAL DE CARTA */
+        /* MODAL DE CARTAS */
         .modal {
             display: none;
             position: fixed;
@@ -139,30 +123,22 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 10px;
         }
 
         .modal.activo { display: flex; }
 
         .carta-content {
-            max-width: 100%;
-            max-height: 90vh;
+            max-width: 95%;
+            max-height: 85vh;
             border: 6px solid white;
             border-radius: 10px;
-            object-fit: contain;
-            transform: scale(0.7);
+            transform: scale(0.6);
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .modal.activo .carta-content { transform: scale(1); }
 
-        /* Ajustes para pantallas muy pequeñas */
-        @media (max-width: 480px) {
-            .regalo-item {
-                flex: 1 1 100%; /* Un regalo por fila en celulares pequeños */
-                padding: 0 20px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -171,7 +147,7 @@
 
     <header>
         <h1>¡FELIZ NAVIDAD HINITAA!</h1>
-        <div class="amor-msg">Te amo mucho mi amorcito ❤️</div>
+        <div style="font-size: 1.5rem; margin-top: 10px;">Te amo mucho mi amorcito ❤️</div>
         <button class="btn-plus-ultra" onclick="lanzarConfeti()">¡PLUS ULTRA!</button>
     </header>
 
@@ -179,11 +155,9 @@
         <div class="regalo-item" onclick="abrir('carta1.png')">
             <img src="regalo1.png" alt="Regalo 1">
         </div>
-
         <div class="regalo-item" onclick="abrir('carta2.png')">
             <img src="regalo2.png" alt="Regalo 2">
         </div>
-
         <div class="regalo-item" onclick="abrir('carta3.png')">
             <img src="regalo3.png" alt="Regalo 3">
         </div>
@@ -196,7 +170,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <script>
-        // --- NIEVE ---
+        // LÓGICA DE NIEVE REINSTALADA
         const canvas = document.getElementById('snowCanvas');
         const ctx = canvas.getContext('2d');
         let w, h, flakes = [];
@@ -207,31 +181,34 @@
             canvas.width = w;
             canvas.height = h;
             flakes = [];
-            for(let i=0; i<120; i++) {
-                flakes.push({x: Math.random()*w, y: Math.random()*h, r: Math.random()*3+1, d: Math.random()*1});
+            for(let i=0; i<150; i++) {
+                flakes.push({
+                    x: Math.random()*w, 
+                    y: Math.random()*h, 
+                    r: Math.random()*3+1, 
+                    d: Math.random()*1 + 0.5
+                });
             }
         }
 
         function drawSnow() {
-            ctx.clearRect(0, 0, w, h);
-            ctx.fillStyle = "white";
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
             ctx.beginPath();
             flakes.forEach(f => {
                 ctx.moveTo(f.x, f.y);
                 ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
-                f.y += f.d + 0.5;
+                f.y += f.d;
                 if(f.y > h) f.y = -10;
             });
             ctx.fill();
             requestAnimationFrame(drawSnow);
         }
 
-        // --- LÓGICA ---
+        // FUNCIONES DE INTERACCIÓN
         function abrir(src) {
-            const modal = document.getElementById('modalCarta');
-            const img = document.getElementById('imgCarta');
-            img.src = src;
-            modal.classList.add('activo');
+            document.getElementById('imgCarta').src = src;
+            document.getElementById('modalCarta').classList.add('activo');
             lanzarConfeti();
         }
 
